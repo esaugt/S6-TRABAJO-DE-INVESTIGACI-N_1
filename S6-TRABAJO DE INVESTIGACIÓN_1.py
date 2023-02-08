@@ -110,7 +110,7 @@ class Pago:
     def mostarDatos(self):
         print("Id Pago:", self.idPago)
         print("Fecha Pago:", self.fechaPago)
-        print("Valor:", self.valor)
+        print("Valor a Pagar:", self.valor)
 
     def realizarPAgo(self):
         self.valor = CabCredito.deuda - self.valor
@@ -156,20 +156,22 @@ def menu():
                 opcion = int(input("Ingrese una opción: "))
                 print("""""")
                 if opcion ==1:
-                    print("Codigo del Cliente: ", Cliente.contadorCliente)
+                    print("Codigo del Cliente: ", Cliente.idCliente)
                     Persona.nombre = input("Ingresa el nombre del cliente: ")
-                    Persona.cedula = int(input("Ingresa cedula del cliente: "))
-                    Persona.estado = bool(True)
-                    cliente1 = Cliente(Persona.nombre, Persona.cedula, Persona.estado)
-                    lstCliente.append(cliente1)
-                    with open("clientes.txt", "w") as file:
-                        for cliente in lstCliente:
-                            file.write("Codigo del Cliente: " + str(cliente.idCliente) + "\n")
-                            file.write("Nombre del Cliente: " + cliente.nombre + "\n")
-                            file.write("Cedula del Cliente: " + str(cliente.cedula) + "\n")
-                            file.write("Estado del Cliente: " + str(cliente.estado) + "\n")
-                    print("Datos de los clientes guardados en clientes.txt")
-                    print("\nCliente agregado correctamente.")
+                    Persona.cedula = input("Ingresa cedula del cliente: ")
+                    if len(Persona.cedula) == 10 and Persona.cedula.isdigit():
+                        Persona.estado = bool(True)
+                        cliente1 = Cliente(Persona.nombre, int(Persona.cedula), Persona.estado)
+                        lstCliente.append(cliente1)
+                        with open("clientes.txt", "w") as file:
+                            for cliente in lstCliente:
+                                file.write("Codigo del Cliente: " + str(cliente.idCliente) + "\n")
+                                file.write("Nombre del Cliente: " + cliente.nombre + "\n")
+                                file.write("Cedula del Cliente: " + str(cliente.cedula) + "\n")
+                                file.write("Estado del Cliente: " + str(cliente.estado) + "\n")
+                            print("\nCliente agregado correctamente.")
+                    else:
+                        print("La cédula debe tener solo 10 dígitos y solo puede contener números.")
                 elif opcion ==2:
                     try:
                         with open("clientes.txt", "r") as file:
@@ -236,8 +238,8 @@ def menu():
                     CabCredito.factura = input("Ingrese Número de Factura: ")
                     CabCredito.fecha = input("Ingresa la Fecha DD-MM-AAAA: ")
                     CabCredito.deuda = float(input("Ingrese el Valor de la Deuda $: "))
-                    CabCredito.numeroCuotas = int(input("Ingrese la Cantidad de Cuota $: "))
-                    CabCredito.cuota = int(input("Ingrese el Número de Cuota #: "))
+                    CabCredito.numeroCuotas = int(input("Ingrese el Número de de Cuotas $: "))
+                    CabCredito.cuota = CabCredito.deuda/CabCredito.numeroCuotas
                     CabCredito.aamminicial = input("Ingrese el AAAA-MM inicial: ")
                     CabCredito.detalleCredito= input("Ingrese los Detalles de Crédito: ")
                     cabCredito1= CabCredito(CabCredito.factura, CabCredito.fecha, CabCredito.deuda, CabCredito.numeroCuotas, CabCredito.cuota, CabCredito.aamminicial,CabCredito.detalleCredito, estado = True)
